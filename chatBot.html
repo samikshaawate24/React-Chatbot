@@ -7,9 +7,11 @@
 </head>
 <body>
     <div class="container"></div>
+
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>  
+
     <script type="text/babel">
 
         function ChatInput(){
@@ -22,37 +24,27 @@
         }
 
         function ChatMessage(props){
-            // const message = props.message;
-            // const sender = props.sender;
             const {message , sender} = props;
-            // if(sender === 'robot'){
-            //     return(
-            //     <div>
-            //         <img src="img/robot.png" width="50"/>
-            //         {message}
-                    
-            //     </div>
 
-            // );
-            // }
             return(
                 <div>
                     {sender === 'robot' && (
                         <img src="img/robot.png" width="50"/>
-                    )
-                    } 
+                    )} 
+
                     {message}
+
                     {sender === 'user' &&  (
                         <img src="img/user.png" width="50"/> 
-                    )
-                    }
+                    )}
                 </div>
-
             );
         }
 
         function ChatMessages(){
-            const ChatMessages =[
+
+            // ✅ Fixed useState destructuring
+            const [ChatMessages, setChatMessages] = React.useState([
                 {
                      message : "hello Chatbot",
                      sender : "user",
@@ -73,39 +65,44 @@
                     sender : "robot",
                     id : 'id4'
                 }
-            ];
+            ]);
 
             function sendMessage(){
-                // console.log('send Message');
-                ChatMessages.push({
+                
+               setChatMessages([
+                // ✅ Fixed spread (use state, not function)
+                ...ChatMessages,
+                {
                     message :'test',
                     sender : 'user',
-                    id :crypto.randomUUID()
-                });
-                console.log(sendMessage);
+                    id : crypto.randomUUID()
+                }
+               ]);
             }
 
             return (
                 <>
+                    <button onClick ={sendMessage}>Send Message</button>
 
-                <button onClick ={sendMessage}>Send Message</button>
-                 {ChatMessages.map( (ChatMessage) => {
-                return(
-                    <ChatMessage
-                        message = {ChatMessage.message}
-                        sender ={ChatMessage.sender}
-                        key =  {ChatMessage.id}
-                    />
-                );
-            })}
+                    {/* ✅ Fixed variable name in map */}
+                    {ChatMessages.map((msg) => {
+                        return(
+                            <ChatMessage
+                                message={msg.message}
+                                sender ={msg.sender}
+                                key ={msg.id}
+                            />
+                        );
+                    })}
                 </>
             )
         }
+
         function App(){
             return(
              <>
                 <ChatInput/>
-               <ChatMessages/>
+                <ChatMessages/>
             </>
             );
         }
