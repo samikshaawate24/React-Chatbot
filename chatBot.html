@@ -23,7 +23,15 @@
         }
 
          function sendMessage(){
-                console.log(inputText);
+                setChatMessages([
+                // ✅ Fixed spread (use state, not function)
+                ...ChatMessages,
+                {
+                    message :'test',
+                    sender : 'user',
+                    id : crypto.randomUUID()
+                }
+               ]);
          }
             return(
                 <>
@@ -84,22 +92,11 @@
                 }
             ]);
 
-            function sendMessage(){
-                
-               setChatMessages([
-                // ✅ Fixed spread (use state, not function)
-                ...ChatMessages,
-                {
-                    message :'test',
-                    sender : 'user',
-                    id : crypto.randomUUID()
-                }
-               ]);
-            }
+           
 
             return (
                 <>
-                    <button onClick ={sendMessage}>Send Message</button>
+                   
 
                     {/* ✅ Fixed variable name in map */}
                     {ChatMessages.map((msg) => {
